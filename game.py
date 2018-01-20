@@ -1,5 +1,5 @@
 import pygame
-from math import *
+from math import sin, cos, radians
 from random import randint
 
 #handle input from pressed keys here
@@ -30,21 +30,18 @@ def translate_graphics(graphics, pos, direction):
   
 def rotate_point(point, angle):
   angle_rad = radians(angle)
-  rotated_point = point
-  rotated_point = (rotated_point[0] * cos(-angle) - rotated_point[1] * sin(-angle),
-                 rotated_point[0] * sin(-angle) + rotated_point[1] * cos(-angle))                 
+  rotated_point = (point[0] * cos(-angle) - point[1] * sin(-angle),
+                 point[0] * sin(-angle) + point[1] * cos(-angle))                 
   return rotated_point
 		
 class playerShip(object):
   def __init__(self,pos):
     self.pos = pos
-    self.step = 10
     self.direction = 0.0
-    self.var = 5
     self.speed = 0
     self.health = 1000
     self.alive = True
-    self.graphics = ((-8.0,-12.0),(0.0,12.0),(8.0,-12.0))
+    self.graphics = ((-8.0,-12.0),(0.0,12.0),(8.0,-12.0),(0.0,-10.0))
 
   def get_pos(self):
     return self.pos
@@ -104,7 +101,7 @@ player = playerShip((randint(10,DISPLAY_W-10),randint(10,DISPLAY_H-10)))
 
 gameDisplay = pygame.display.set_mode((DISPLAY_W,DISPLAY_H))
 
-pygame.display.set_caption('spaceshit')
+pygame.display.set_caption('ASSTEROIDS')
 ticker = pygame.time.Clock()
 
 game_running = True
