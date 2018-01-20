@@ -9,10 +9,10 @@ def handle_input(pressedKeys):
   if not pressedKeys[pygame.K_UP]:
     player.decelerate()
   if pressedKeys[pygame.K_LEFT]:
-	player.turn('left')
+    player.turn('left')
   if pressedKeys[pygame.K_RIGHT]:
-	player.turn('right')
-	
+    player.turn('right')
+
 def draw_ship(pos, direction):
   graphics = translate_graphics(player.get_graphics(), pos, direction)
   pygame.draw.aalines(gameDisplay, WHITE, True, graphics, 2)
@@ -33,7 +33,7 @@ def rotate_point(point, angle):
   rotated_point = (point[0] * cos(-angle) - point[1] * sin(-angle),
                  point[0] * sin(-angle) + point[1] * cos(-angle))                 
   return rotated_point
-		
+
 class playerShip(object):
   def __init__(self,pos):
     self.pos = pos
@@ -47,46 +47,45 @@ class playerShip(object):
     return self.pos
     
   def set_pos(self, pos):
-	 self.pos = pos
+    self.pos = pos
   
   def set_speed(self, speed):
     self.speed = speed
     
   def get_speed(self):
-	return self.speed
-	
+    return self.speed
+
   def get_direction(self):
     return self.direction
 
   def accelerate(self):
     if self.get_speed() < 4.5:
-	  self.set_speed(self.get_speed()+0.1)
+      self.set_speed(self.get_speed()+0.1)
 
   def decelerate(self):
     if(self.get_speed() > 0):
-	  self.set_speed(self.get_speed()*0.98)
-	  
+      self.set_speed(self.get_speed()*0.98)
+  
   def turn(self, direction):
     if direction == 'left':
-   	  self.direction = self.direction + TURN_RATE
+      self.direction = self.direction + TURN_RATE
     else:
-	  self.direction = self.direction - TURN_RATE
-		
+      self.direction = self.direction - TURN_RATE
+
   def move(self):
     x = self.pos[0] + (self.get_speed() * sin(self.direction)) 
     y = self.pos[1] + (self.get_speed() * cos(self.direction))
     self.set_pos((x,y))
-	  
+  
   def is_alive(self):
-	  if self.health < 0:
-		  self.alive = False
-		  self.set_speed(0)
-		  
-	  return self.alive
-	  
+    if self.health < 0:
+      self.alive = False
+      self.set_speed(0)
+    return self.alive
+ 
   def get_graphics(self):
-	  return self.graphics;
-	  
+    return self.graphics;
+  
 pygame.init()
 
 DISPLAY_W = 1200
@@ -113,9 +112,9 @@ while game_running:
         
   pressedKeys = pygame.key.get_pressed()
   handle_input(pressedKeys)
-	
+
   if player.get_speed() != 0:
-	  player.move()
+    player.move()
 
   gameDisplay.fill(BLACK)  
 
