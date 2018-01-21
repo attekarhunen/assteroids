@@ -5,7 +5,7 @@ from random import randint
 #handle input from pressed keys here
 def handle_input(pressedKeys):
   if pressedKeys[pygame.K_UP]:
-    player.accelerate()
+    player.thrust()
   if not pressedKeys[pygame.K_UP]:
     player.decelerate()
   if pressedKeys[pygame.K_LEFT]:
@@ -13,9 +13,10 @@ def handle_input(pressedKeys):
   if pressedKeys[pygame.K_RIGHT]:
     player.turn('right')
 
+#draw ship geometry
 def draw_ship(pos, direction):
-  graphics = translate_graphics(player.get_graphics(), pos, direction)
-  pygame.draw.aalines(gameDisplay, WHITE, True, graphics, 2)
+  geometry = translate_graphics(player.get_geometry(), pos, direction)
+  pygame.draw.aalines(gameDisplay, WHITE, True, geometry, 2)
 
   
 def translate_graphics(graphics, pos, direction):
@@ -38,10 +39,10 @@ class playerShip(object):
   def __init__(self,pos):
     self.pos = pos
     self.direction = 0.0
-    self.speed = 0
     self.health = 1000
     self.alive = True
-    self.graphics = ((-8.0,-12.0),(0.0,12.0),(8.0,-12.0),(0.0,-10.0))
+    self.geometry = ((-8.0,-12.0),(0.0,12.0),(8.0,-12.0),(0.0,-10.0))
+    self.movement = [0.0, 0.0]
 
   def get_pos(self):
     return self.pos
@@ -53,7 +54,7 @@ class playerShip(object):
     self.speed = speed
     
   def get_speed(self):
-    return self.speed
+    return self.movement[1]
 
   def get_direction(self):
     return self.direction
@@ -63,8 +64,9 @@ class playerShip(object):
       self.set_speed(self.get_speed()+0.1)
 
   def decelerate(self):
-    if(self.get_speed() > 0):
-      self.set_speed(self.get_speed()*0.98)
+    if(self.movement[1] > 0):
+      self.movement[1] = self.movement[1]*0.98
+    self.move()
   
   def turn(self, direction):
     if direction == 'left':
@@ -72,9 +74,10 @@ class playerShip(object):
     else:
       self.direction = self.direction - TURN_RATE
 
+  #movement[0] = direction, movement[1] = speed
   def move(self):
-    x = self.pos[0] + (self.get_speed() * sin(self.direction)) 
-    y = self.pos[1] + (self.get_speed() * cos(self.direction))
+    x = self.pos[0] + (self.movement[1] * sin(self.movement[0])) 
+    y = self.pos[1] + (self.movement[1] * cos(self.movement[0]))
     self.set_pos((x,y))
   
   def is_alive(self):
@@ -83,14 +86,23 @@ class playerShip(object):
       self.set_speed(0)
     return self.alive
  
-  def get_graphics(self):
-    return self.graphics;
+  def get_geometry(self):
+    return self.geometry;
+    
+  def thrust(self):
+    if(self.movement[1] < 4):
+      self.movement[1] += 0.5
+      
+    self.movement[0] = self.get_direction()
+    #self.set_speed(2.0)
+    self.move()
+    
   
 pygame.init()
 
+#init some constants
 DISPLAY_W = 1200
 DISPLAY_H = 800
-
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 RED = (255,0,0)
