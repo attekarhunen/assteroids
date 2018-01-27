@@ -1,7 +1,8 @@
 import pygame
 import sys
+import random
 from math import sin, cos, radians, pi
-from random import randint
+
 
 #handle input from pressed keys here
 def handle_input(pressedKeys):
@@ -84,7 +85,7 @@ class playerShip(object):
 #faster than a laser bullet
 class laserBullet(object):
   def __init__(self,pos,vector):
-    self.life = 50
+    self.life = 25
     self.prevPos = pos
     self.pos = pos
     self.move_vector = vector
@@ -101,7 +102,25 @@ class laserBullet(object):
     self.prevPos = self.pos
     self.pos = newPos
     
-  
+class asteroid(object):
+  def __init__(self):
+    self.move_vector = angle_to_vector(random.uniform(-3,3))
+    self.geometry = ((-25,-25),(25,-25),(25,25),(-25,25))
+    self.pos = ((random.uniform(200,DISPLAY_W-200)),(random.uniform(200,DISPLAY_H-200)))
+    self.direction = random.uniform(-3,3)
+    
+  def move(self):
+    self.direction += 0.0045
+    newPos = ((
+    self.pos[0]+(self.move_vector[0]*0.5),
+    self.pos[1]+(self.move_vector[1]*0.5)
+    ))
+    self.pos = newPos
+    
+  def draw(self):
+    translated_graphics = translate_graphics(self.geometry, self.pos,self.direction)
+    pygame.draw.aalines(gameDisplay, CYAN, True, translated_graphics, 2)
+    
 pygame.init()
 
 myfont = pygame.font.SysFont("monospace", 15)
@@ -112,7 +131,9 @@ DISPLAY_H = 800
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 RED = (255,0,0)
-YELLOW = (255,255,0) 
+YELLOW = (255,255,0)
+CYAN = (0,255,255)
+
 TURN_RATE = 0.15
 THRUST = 0.25
 FRICTION = 0.005
@@ -131,6 +152,11 @@ if len(sys.argv) > 1:
 
 game_running = True
 bullets = []
+asteroids = []
+asteroids.append(asteroid())
+asteroids.append(asteroid())
+asteroids.append(asteroid())
+asteroids.append(asteroid())
 
 while game_running:
   for event in pygame.event.get():
@@ -168,6 +194,10 @@ while game_running:
     else:
       bullets.remove(bullet)
       del bullet
+      
+  for asteroid in asteroids:
+    asteroid.move()
+    asteroid.draw()
 
   
   if debug:
