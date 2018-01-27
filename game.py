@@ -76,6 +76,31 @@ class playerShip(object):
       self.alive = False
       self.set_speed(0)
     return self.alive
+    
+  def shoot(self):
+    bullet = laserBullet(self.pos, angle_to_vector(self.direction))
+    return bullet
+
+#faster than a laser bullet
+class laserBullet(object):
+  def __init__(self,pos,vector):
+    self.life = 50
+    self.prevPos = pos
+    self.pos = pos
+    self.move_vector = vector
+  
+  def draw(self):
+    pygame.draw.aaline(gameDisplay, RED, self.pos, self.prevPos, 3)
+    
+  def move(self):
+    self.life -= 1
+    newPos = ((
+    self.pos[0]+(self.move_vector[0]*BULLET_SPEED),
+    self.pos[1]+(self.move_vector[1]*BULLET_SPEED)
+    ))
+    self.prevPos = self.pos
+    self.pos = newPos
+    
   
 pygame.init()
 
@@ -91,6 +116,7 @@ YELLOW = (255,255,0)
 TURN_RATE = 0.15
 THRUST = 0.25
 FRICTION = 0.005
+BULLET_SPEED = 20
 
 player = playerShip((DISPLAY_W/2,DISPLAY_H/2))
 
@@ -104,11 +130,16 @@ if len(sys.argv) > 1:
     debug = True
 
 game_running = True
+bullets = []
 
 while game_running:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       game_running = False
+    
+    if event.type == pygame.KEYDOWN:
+      if event.key == pygame.K_SPACE:
+        bullets.append(player.shoot())
   
   direction_debug = "Direction: " + str(player.direction)
   thrusting_debug = "Thrusting: " + str(player.thrusting) + ", (" + str(THRUST) + ")"
@@ -129,6 +160,15 @@ while game_running:
   player.move()
   
   draw_ship(player.pos, player.direction)
+  
+  for bullet in bullets:
+    bullet.move()
+    if bullet.life > 0:
+      bullet.draw()
+    else:
+      bullets.remove(bullet)
+      del bullet
+
   
   if debug:
     gameDisplay.blit(direction_label, (50, 50))
