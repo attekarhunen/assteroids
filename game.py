@@ -108,13 +108,25 @@ class asteroid(object):
     self.geometry = ((-25,-25),(25,-25),(25,25),(-25,25))
     self.pos = ((random.uniform(200,DISPLAY_W-200)),(random.uniform(200,DISPLAY_H-200)))
     self.direction = random.uniform(-3,3)
+    self.turning = random.uniform(-0.01,0.01)
     
   def move(self):
-    self.direction += 0.0045
-    newPos = ((
-    self.pos[0]+(self.move_vector[0]*0.5),
-    self.pos[1]+(self.move_vector[1]*0.5)
-    ))
+    self.direction += self.turning
+    
+    x = self.pos[0]+(self.move_vector[0]*0.5)
+    y = self.pos[1]+(self.move_vector[1]*0.5)
+    
+    if x > DISPLAY_W:
+      x -= DISPLAY_W
+    if x < 0:
+      x += DISPLAY_W
+    if y > DISPLAY_H:
+      y -= DISPLAY_H
+    if y < 0:
+      y -= DISPLAY_H
+    
+    
+    newPos = ((x,y))
     self.pos = newPos
     
   def draw(self):
@@ -153,6 +165,8 @@ if len(sys.argv) > 1:
 game_running = True
 bullets = []
 asteroids = []
+asteroids.append(asteroid())
+asteroids.append(asteroid())
 asteroids.append(asteroid())
 asteroids.append(asteroid())
 asteroids.append(asteroid())
