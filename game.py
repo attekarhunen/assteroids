@@ -1,7 +1,7 @@
 import pygame
 import sys
 import random
-from math import sin, cos, radians, pi
+from math import sin, cos, radians, pi, hypot
 
 
 #handle input from pressed keys here
@@ -220,7 +220,12 @@ while game_running:
     gameDisplay.blit(movement_label, (50, 90))
     gameDisplay.blit(ship_label, (50, 110))
     gameDisplay.blit(pos_label, (50, 130))
-    pygame.draw.aaline(gameDisplay, RED, (DISPLAY_W/2, DISPLAY_H/2), player.pos, 1)
+    
+    for asteroid in asteroids:
+      if hypot(asteroid.pos[0] - player.pos[0], asteroid.pos[1] - player.pos[1]) < 50:
+        pygame.draw.aaline(gameDisplay, RED, asteroid.pos, player.pos, 1)
+      else:
+        pygame.draw.aaline(gameDisplay, WHITE, asteroid.pos, player.pos, 1)
 
   pygame.display.update()
 
