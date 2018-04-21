@@ -18,3 +18,11 @@ And then to run:
 python3 game.py
 ```
 
+On my Windows computer, I just installed Python 3.6, and then:
+
+```
+pip install pygame
+python game.py
+```
+
+
