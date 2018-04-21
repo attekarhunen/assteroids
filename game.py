@@ -109,6 +109,7 @@ class asteroid(object):
     self.pos = ((random.uniform(200,DISPLAY_W-200)),(random.uniform(200,DISPLAY_H-200)))
     self.direction = random.uniform(-3,3)
     self.turning = random.uniform(-0.01,0.01)
+    self.life = 100
     
   def move(self):
     self.direction += self.turning
@@ -125,14 +126,13 @@ class asteroid(object):
     if y < 0:
       y -= DISPLAY_H
     
-    
     newPos = ((x,y))
     self.pos = newPos
     
   def draw(self):
     translated_graphics = translate_graphics(self.geometry, self.pos,self.direction)
     pygame.draw.aalines(gameDisplay, CYAN, True, translated_graphics, 2)
-    
+
 pygame.init()
 
 myfont = pygame.font.SysFont("monospace", 15)
@@ -209,10 +209,20 @@ while game_running:
       bullets.remove(bullet)
       del bullet
       
+      
   for asteroid in asteroids:
-    asteroid.move()
-    asteroid.draw()
-
+    if(asteroid.life > 0):
+      asteroid.move()
+      asteroid.draw()
+      for bullet in bullets:
+        if hypot(asteroid.pos[0] - bullet.pos[0], asteroid.pos[1] - bullet.pos[1]) < 15:
+          asteroid.life = 0
+          bullet.life = 0
+        
+    else:
+      asteroids.remove(asteroid)
+      del asteroid
+    
   
   if debug:
     gameDisplay.blit(direction_label, (50, 50))
