@@ -1,7 +1,8 @@
 import pygame
 import sys
 import random
-from math import sin, cos, radians, pi, hypot
+from math import sin, cos, pi, hypot
+from helper import functions
 
 
 # handle input from pressed keys here
@@ -18,32 +19,15 @@ def handle_input(pressedKeys):
 
 # draw ship geometry
 def draw_ship(pos, direction):
-    geometry = translate_graphics(player.geometry, pos, direction)
+    geometry = functions.translate_graphics(player.geometry, pos, direction)
     pygame.draw.aalines(gameDisplay, WHITE, True, geometry, 2)
     if player.thrusting:
-        jet = translate_graphics(player.jet, pos, direction)
+        jet = functions.translate_graphics(player.jet, pos, direction)
         pygame.draw.aalines(gameDisplay, YELLOW, True, jet, 2)
-
-
-def translate_graphics(graphics, pos, direction):
-    translated_graphics = ()
-    for t_pos in graphics:
-        t_pos = rotate_point(t_pos, direction)
-        x = t_pos[0] + pos[0]
-        y = t_pos[1] + pos[1]
-        translated_graphics = ((x, y),) + (translated_graphics)
-    return translated_graphics
 
 
 def angle_to_vector(angle):
     return [sin(angle), cos(angle)]
-
-
-def rotate_point(point, angle):
-    angle_rad = radians(angle)
-    rotated_point = (point[0] * cos(-angle) - point[1] * sin(-angle),
-                     point[0] * sin(-angle) + point[1] * cos(-angle))
-    return rotated_point
 
 
 class playerShip(object):
@@ -137,7 +121,7 @@ class asteroid(object):
         self.pos = newpos
 
     def draw(self):
-        translated_graphics = translate_graphics(self.geometry, self.pos, self.direction)
+        translated_graphics = functions.translate_graphics(self.geometry, self.pos, self.direction)
         pygame.draw.aalines(gameDisplay, CYAN, True, translated_graphics, 2)
 
 
@@ -222,7 +206,7 @@ while game_running:
             asteroid.move()
             asteroid.draw()
             for bullet in bullets:
-                if hypot(asteroid.pos[0] - bullet.pos[0], asteroid.pos[1] - bullet.pos[1]) < 15:
+                if hypot(asteroid.pos[0] - bullet.pos[0], asteroid.pos[1] - bullet.pos[1]) < 25:
                     asteroid.life = 0
                     bullet.life = 0
 
