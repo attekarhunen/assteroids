@@ -3,7 +3,7 @@ import sys
 from math import sin, cos, pi, hypot
 from helper import functions
 from model import Model
-#from asteroid import Asteroid
+from asteroid import Asteroid
 
 
 # handle input from pressed keys here
@@ -111,6 +111,9 @@ game_running = True
 bullets = []
 asteroids = []
 
+for x in range(0, 5):
+    asteroids.append(Asteroid.Asteroid((50, 50)))
+
 while game_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -151,7 +154,7 @@ while game_running:
     for asteroid in asteroids:
         if asteroid.life > 0:
             asteroid.move()
-            asteroid.draw()
+            pygame.draw.aalines(gameDisplay, model.CYAN, True, asteroid.getGraphics(), 2)
             for bullet in bullets:
                 if hypot(asteroid.pos[0] - bullet.pos[0], asteroid.pos[1] - bullet.pos[1]) < 25:
                     asteroid.life = 0
@@ -170,9 +173,9 @@ while game_running:
 
         for asteroid in asteroids:
             if hypot(asteroid.pos[0] - player.pos[0], asteroid.pos[1] - player.pos[1]) < 50:
-                pygame.draw.aaline(gameDisplay, RED, asteroid.pos, player.pos, 1)
+                pygame.draw.aaline(gameDisplay, model.RED, asteroid.pos, player.pos, 1)
             else:
-                pygame.draw.aaline(gameDisplay, WHITE, asteroid.pos, player.pos, 1)
+                pygame.draw.aaline(gameDisplay, model.WHITE, asteroid.pos, player.pos, 1)
 
     pygame.display.update()
 
