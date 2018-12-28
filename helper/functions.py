@@ -16,3 +16,6 @@ def translate_graphics(graphics, pos, direction):
         translated_graphics = ((x, y),) + (translated_graphics)
     return translated_graphics
 
+
+def angle_to_vector(angle):
+    return [sin(angle), cos(angle)]
