@@ -3,7 +3,6 @@ import sys
 from math import sin, cos, pi, hypot
 from helper import functions
 from model import Model
-from asteroid import Asteroid
 
 
 # handle input from pressed keys here
@@ -94,7 +93,7 @@ pygame.init()
 
 myfont = pygame.font.SysFont("monospace", 15)
 
-model = Model.Model
+model = Model.Model()
 
 player = playerShip((model.DISPLAY_W / 2, model.DISPLAY_H / 2))
 
@@ -109,10 +108,6 @@ if len(sys.argv) > 1:
 
 game_running = True
 bullets = []
-asteroids = []
-
-for x in range(0, 5):
-    asteroids.append(Asteroid.Asteroid((50, 50)))
 
 while game_running:
     for event in pygame.event.get():
@@ -151,7 +146,7 @@ while game_running:
             bullets.remove(bullet)
             del bullet
 
-    for asteroid in asteroids:
+    for asteroid in model.asteroids:
         if asteroid.life > 0:
             asteroid.move()
             pygame.draw.aalines(gameDisplay, model.CYAN, True, asteroid.getGraphics(), 2)
@@ -161,7 +156,7 @@ while game_running:
                     bullet.life = 0
 
         else:
-            asteroids.remove(asteroid)
+            model.asteroids.remove(asteroid)
             del asteroid
 
     if debug:
@@ -171,7 +166,7 @@ while game_running:
         gameDisplay.blit(ship_label, (50, 110))
         gameDisplay.blit(pos_label, (50, 130))
 
-        for asteroid in asteroids:
+        for asteroid in model.asteroids:
             if hypot(asteroid.pos[0] - player.pos[0], asteroid.pos[1] - player.pos[1]) < 50:
                 pygame.draw.aaline(gameDisplay, model.RED, asteroid.pos, player.pos, 1)
             else:
