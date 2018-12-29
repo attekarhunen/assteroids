@@ -1,9 +1,10 @@
 from asteroid import Asteroid
+import random
 
 
 class Model(object):
-    DISPLAY_W = 1200
-    DISPLAY_H = 800
+    DISPLAY_W = 800
+    DISPLAY_H = 600
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
@@ -20,4 +21,4 @@ class Model(object):
         print("Model initialized")
 
         for i in range(0, 5):
-            self.asteroids.append(Asteroid.Asteroid((50, 50)))
+            self.asteroids.append(Asteroid.Asteroid(((random.uniform(100, self.DISPLAY_W - 100)), (random.uniform(100, self.DISPLAY_H - 100)))))
