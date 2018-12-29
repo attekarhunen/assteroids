@@ -21,4 +21,4 @@ class Model(object):
         print("Model initialized")
 
         for i in range(0, 5):
-            self.asteroids.append(Asteroid.Asteroid(((random.uniform(100, self.DISPLAY_W - 100)), (random.uniform(100, self.DISPLAY_H - 100)))))
+            self.asteroids.append(Asteroid.Asteroid(((random.uniform(100, self.DISPLAY_W - 100)), (random.uniform(100, self.DISPLAY_H - 100))), 3))
