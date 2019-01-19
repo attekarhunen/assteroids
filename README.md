@@ -1,4 +1,4 @@
-# Assteroids
+# Assteroids!
 
 Me trying to learn a bit of game programming with [Pygame](www.pygame.org)
 
